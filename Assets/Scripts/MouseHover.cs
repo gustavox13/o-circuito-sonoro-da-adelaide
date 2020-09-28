@@ -17,9 +17,15 @@ public class MouseHover : MonoBehaviour
     [SerializeField]
     private GameObject[] localHUD = new GameObject[5];
 
+    [SerializeField]
+    private GameObject clickAudioObj;
+
+    private AudioSource clickAudio;
 
     private void Start()
     {
+        clickAudio = clickAudioObj.GetComponent<AudioSource>();
+
         myName = gameObject.name;
         hoveranim = gameObject.GetComponent<Animator>();
     }
@@ -37,12 +43,18 @@ public class MouseHover : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
+        clickAudio.Play();
         gameController.GetComponent<GameController>().CheckAnswer(myName); 
     }
 
-    public void PositionMyIcon(int localPosition)
+    public void ResetIconPositions() // RESETA A POSICAO DOS ICONES
     {
-        Debug.Log("entrou no position my icon");
+        mySymbol.transform.position = new Vector3(0,9,0);
+    }
+
+    public void PositionMyIcon(int localPosition) //POSICIONA O ICONE NO LUGAR CERTO
+    {
+        
         mySymbol.transform.position = localHUD[localPosition].transform.position;
     }
 

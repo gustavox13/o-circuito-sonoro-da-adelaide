@@ -8,16 +8,19 @@ public class GameController : MonoBehaviour
     private GameObject[] elements = new GameObject[5];
     private AudioSource[] audios = new AudioSource[5];
 
-
-
     [SerializeField]
     private GameObject pacoca;
     private Animator animPacoca;
 
     [SerializeField]
+    private GameObject pacocanegativo;
+
+    private Animator pacocanegativoanim;
+
+    [SerializeField]
     private GameObject tutorialCanvas;
 
-    private int lvl = 5;
+    private int lvl = 1;
 
     private int stepRoute = 0;
 
@@ -29,12 +32,18 @@ public class GameController : MonoBehaviour
         DisableColliders();
     }
 
+    private void Start() // apenas mostra o percurso
+    {
+        for (int i = 0; i < elements.Length; i++)
+        {
+            Debug.Log(elements[i].name);
+        }
+    }
+
     //FECHA TUTORIAL E STARTA PRIMEIRO LVL
     public void CloseTutoAndStart()
     {
-        tutorialCanvas.SetActive(false);
-        
-
+        tutorialCanvas.SetActive(false);     
         StartCoroutine(StartRound(lvl));
     }
 
@@ -46,11 +55,9 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < currentLvl; i++)
         {
-            Debug.Log(elements[i].name);
-
             audios[i].Play();
 
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(4f);
         }
 
         EnableColliders();
@@ -60,29 +67,64 @@ public class GameController : MonoBehaviour
 
     public void CheckAnswer(string currentClicked)
     {
+
         if(stepRoute < lvl)
         {
-           if (currentClicked == elements[stepRoute].name)
+           if (currentClicked == elements[stepRoute].name) //RESPOSTA CORRETA
             {
-                Debug.Log("resposta certa");
                 elements[stepRoute].GetComponent<MouseHover>().PositionMyIcon(stepRoute);
-
                 stepRoute++;
             }
-            else
+            else // RESPOSTA ERRADA
             {
-                Debug.Log("resposta errada");
+                StartCoroutine(Wronganswer());
+                
             }
-
-            
+ 
         }
 
-        if(stepRoute == lvl)
+        if(stepRoute == lvl) // FIM DO TURNO
         {
-            Debug.Log("terminou o lvl");
+            stepRoute = 0;
+            StartCoroutine(EndRound());
         }
     }
 
+    IEnumerator Wronganswer()
+    {
+        pacocanegativoanim.SetTrigger("wrong");
+        DisableColliders();
+        yield return new WaitForSeconds(2.6f);
+        EnableColliders();
+
+    }
+
+    IEnumerator EndRound()
+    {
+        DisableColliders();
+
+        yield return new WaitForSeconds(1);
+
+        Debug.Log("o pacoca anda aqui"); // PACOCA ANDA AQUI
+
+        yield return new WaitForSeconds(1); // TEMPO DO PACOCA ANDAR
+
+        for (int i = 0; i < elements.Length; i++)
+        {
+            elements[i].GetComponent<MouseHover>().ResetIconPositions();
+        }
+
+        lvl++;
+
+        if(lvl <= 5)
+        {
+            StartCoroutine(StartRound(lvl));
+        }
+        else
+        {
+            Debug.Log("acaba o jogo"); // JOGO ACABA
+        }
+    }
 
     //DESATIVA COLIDER
     private void DisableColliders()
@@ -121,11 +163,11 @@ public class GameController : MonoBehaviour
     {
         for (int i = 0; i < elements.Length; i++)
         {
-
             audios[i] = elements[i].gameObject.GetComponent<AudioSource>();
-
         }
 
+
+        pacocanegativoanim = pacocanegativo.GetComponent<Animator>();
     }
 
 }
