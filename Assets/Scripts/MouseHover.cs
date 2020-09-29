@@ -6,6 +6,9 @@ public class MouseHover : MonoBehaviour
 {
     private string myName;
 
+    [SerializeField]
+    private Vector3 myLocal;
+
     private Animator hoveranim;
 
     [SerializeField]
@@ -44,7 +47,7 @@ public class MouseHover : MonoBehaviour
     private void OnMouseUpAsButton()
     {
         clickAudio.Play();
-        gameController.GetComponent<GameController>().CheckAnswer(myName); 
+        gameController.GetComponent<GameController>().CheckAnswer(myName, myLocal); 
     }
 
     public void ResetIconPositions() // RESETA A POSICAO DOS ICONES
