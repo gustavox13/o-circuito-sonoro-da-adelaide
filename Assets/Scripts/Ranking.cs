@@ -12,22 +12,22 @@ public class Ranking : MonoBehaviour
     private GameObject star2;
     [SerializeField]
     private GameObject star3;
-    //[SerializeField]
-    //private GameObject gameController;
+    [SerializeField]
+    private GameObject gameController;
 
-    private int score;
+    private int numplays;
 
 
     private void Start()
     {
-       // score = gameController.GetComponent<GameController>().QuantPlays;
+        numplays = gameController.GetComponent<GameController>().QuantPlays;
 
         StartCoroutine(ShowStars());
     }
 
     IEnumerator ShowStars()
     {
-        if(score <= 5)
+        if(numplays <= 15) //3 ESTRELAS
         {
             
             star1.SetActive(true);
@@ -39,7 +39,8 @@ public class Ranking : MonoBehaviour
             yield return new WaitForSeconds(0.4f);
 
             star3.SetActive(true);
-        } else if(score > 5  && score <= 9)
+
+        } else if(numplays > 15  && numplays <= 25) // 2 estrelas
         {
             star1.SetActive(true);
 

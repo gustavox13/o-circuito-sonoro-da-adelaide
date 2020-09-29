@@ -7,7 +7,6 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private GameObject[] elements = new GameObject[5];
     private AudioSource[] audios = new AudioSource[5];
-
     private Vector3[] ElementLocations = new Vector3[5];
 
 
@@ -17,17 +16,19 @@ public class GameController : MonoBehaviour
 
     [SerializeField]
     private GameObject pacocanegativo;
-
     private Animator pacocanegativoanim;
 
     [SerializeField]
     private GameObject tutorialCanvas;
+    [SerializeField]
+    private GameObject EndScreen;
+
 
     private int lvl = 1;
-
     private int stepRoute = 0;
-
     private bool pacocaWalk = false;
+
+    public int QuantPlays = 0;
 
     /*
     private Vector3 igrejaLocal = new Vector3(-0.54f, 0.34f, 0);
@@ -93,9 +94,26 @@ public class GameController : MonoBehaviour
     }
 
 
-
-    public void CheckAnswer(string currentClicked, Vector3 local)
+    public void RepeatAudio()
     {
+        StartCoroutine(AudioRepeatInTime());
+    }
+
+    IEnumerator AudioRepeatInTime()
+    {
+        for (int i = 0; i < lvl; i++)
+        {
+            audios[i].Play();
+
+            yield return new WaitForSeconds(4f);
+        }
+    }
+    
+
+        public void CheckAnswer(string currentClicked, Vector3 local)
+    {
+        QuantPlays++;
+
 
         if(stepRoute < lvl)
         {
@@ -151,9 +169,14 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            Debug.Log("acaba o jogo"); // JOGO ACABA
+            Debug.Log("acaba o jogo, e a quant plays foi: " + QuantPlays); // JOGO ACABA
+            EndScreen.SetActive(true);
+
         }
     }
+
+
+
 
     IEnumerator PacocaCaminhando() // PACOCA ANDA
     {
@@ -178,11 +201,8 @@ public class GameController : MonoBehaviour
             animPacoca.SetBool("walk", false);
         }
 
-        
-
-        
-
-        yield return new WaitForSeconds(2);
+ 
+        yield return new WaitForSeconds(2); // TEMPO DE ESPERA PARA PROX TURNO
 
         pacocaWalk = false;
         
