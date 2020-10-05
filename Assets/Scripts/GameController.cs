@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
     }
 
 
-
+    //INICIA O ROUND TOCANDO OS SONS
     IEnumerator StartRound(int currentLvl)
     {
         yield return new WaitForSeconds(1); //TEMPO PARA INICIAR O TURNO
@@ -87,7 +87,7 @@ public class GameController : MonoBehaviour
         {
             audios[i].Play();
 
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(2f);
         }
 
         EnableColliders();
@@ -99,18 +99,19 @@ public class GameController : MonoBehaviour
         StartCoroutine(AudioRepeatInTime());
     }
 
+
     IEnumerator AudioRepeatInTime()
     {
         for (int i = 0; i < lvl; i++)
         {
             audios[i].Play();
 
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(2f);
         }
     }
     
-
-        public void CheckAnswer(string currentClicked, Vector3 local)
+    //CHECA RESPOSTA E ETAPA
+    public void CheckAnswer(string currentClicked, Vector3 local)
     {
         QuantPlays++;
 
@@ -144,7 +145,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-
+    //SE RESPOSTA FOR INCORRETA
     IEnumerator Wronganswer()
     {
         pacocanegativoanim.SetTrigger("wrong");
@@ -154,6 +155,7 @@ public class GameController : MonoBehaviour
 
     }
 
+    //FINALIZA TURNO
     private void EndRound()
     {
         for (int i = 0; i < elements.Length; i++) // RESETA OS ICONES DE CIMA
@@ -175,10 +177,8 @@ public class GameController : MonoBehaviour
         }
     }
 
-
-
-
-    IEnumerator PacocaCaminhando() // PACOCA ANDA
+    // PACOCA ANDA
+    IEnumerator PacocaCaminhando() 
     {
         for(int i = 0; i < lvl; i++)
         {
@@ -210,8 +210,7 @@ public class GameController : MonoBehaviour
         EndRound(); // VAI PARA O FIM DO TURNO
     }
 
-
-        //DESATIVA COLIDER
+    //DESATIVA COLIDER
     private void DisableColliders()
     {
         for (int i = 0; i < elements.Length; i++)
@@ -229,7 +228,6 @@ public class GameController : MonoBehaviour
         }
     }
 
-
     // EMBARALHA OS ANIMAIS -------- 1
     private void ShuffleElements()
     {
@@ -241,7 +239,6 @@ public class GameController : MonoBehaviour
             elements[randomizeArray] = obj;
         }
     }
-
 
     //PROCURA E PEGA TODOS OS COMPONENTES DOS ELEMENTOS ----------- 2
     private void GetAllComponents()
